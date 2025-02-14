@@ -6,9 +6,15 @@
 // 3. Implement a method `enterZoo` that returns a welcome message with the guest's name.
 
 function AgeRestriction(minAge: number) {
-  return function <T extends { new (...args: any[]): {} }>(target: T, context: ClassDecoratorContext) {
+  return function <T extends { new(...args: any[]): {} }>(target: T, context: ClassDecoratorContext) {
     return class extends target {
-      // YOUR CODE HERE
+      constructor(...args: any[]) {
+        const [name, age] = args
+        if (age < minAge) {
+          throw new Error(`🚫 Access Denied: ${name} is under ${minAge} and cannot enter the zoo!`);
+        }
+        super(...args)
+      }
     };
   };
 }
@@ -18,10 +24,13 @@ class ZooGuest {
   name: string;
   age: number;
 
-  constructor(name: string, age: number) {}
+  constructor(name: string, age: number) {
+    this.name = name
+    this.age = age
+  }
 
-  enterZoo() {
-    // Add welcome message
+  enterZoo(): string {
+    return `🎟️ Welcome to the zoo, ${this.name}! Enjoy your visit.`
   }
 }
 

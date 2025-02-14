@@ -27,24 +27,37 @@ interface CartItem {
 class ShoppingCart<T extends CartItem> {
   cart = []
 
-  addToCart(product) {
-
+  addToCart(product: CartItem): string {
+    this.cart.push(product)
+    return `${product.name} added to cart`
   }
 
-  updateQuantity(id, qty) {
-
+  updateQuantity(id: number, qty: number): string {
+    const foundProduct: CartItem = this.cart.find(product => product.id === id)
+    if (!foundProduct) {
+      return `Product not found`
+    }
+    foundProduct.quantity = qty
+    return `Updated quantity of ${foundProduct.name} to ${qty}`
   }
 
-  getTotalPrice() {
-
+  getTotalPrice(): number {
+    let totalPrice: number = 0
+    this.cart.forEach(product => {
+      totalPrice += product.price
+    });
+    return totalPrice
   }
 
-  getProductsOfCategory(category) {
-
+  getProductsOfCategory(category: string): CartItem[] {
+    let filterProduct: CartItem[] = this.cart.filter(products => products.category === category)
+    return filterProduct
   }
 
-  removeFromCart(id) {
-
+  removeFromCart(id: number): string {
+    let foundProduct: CartItem = this.cart.find(produc => produc.id == id)
+    this.cart = this.cart.filter(produc => produc.id !== id)
+    return `${foundProduct.name} removed form cart`
   }
 }
 
@@ -53,6 +66,7 @@ const cart = new ShoppingCart();
 
 console.log(cart.addToCart({ id: 1, name: "Headphones", price: 50, quantity: 1, category: Category.Electronics })); // "Headphones added to cart."
 console.log(cart.addToCart({ id: 2, name: "Keyboard", price: 100, quantity: 1, category: Category.Electronics })); // "Keyboard added to cart."
+console.log(cart.addToCart({ id: 3, name: "Apple", price: 0, quantity: 1, category: Category.Fruit })); // "Keyboard added to cart."
 console.log(cart.updateQuantity(1, 3)); // "Updated quantity of Headphones to 3."
 console.log(cart.getProductsOfCategory("Electronics")) // Should return all electronics
 console.log(cart.getTotalPrice()); // Should return the total cost of items

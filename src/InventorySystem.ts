@@ -18,24 +18,37 @@ interface Product {
 class InventoryManager<T extends Product> {
   products = []
 
-  addProduct(product) {
-
+  addProduct(product: Product): string {
+    this.products.push(product)
+    return `Product ${product.name} added successfully!`
   }
 
-  updateProduct(id, update) {
+  updateProduct(id: number, update): string {
+    let foundProduct: Product = this.products.find(products => products.id === id)
+    if (!foundProduct) {
+      return `Product not found`
+    }
 
+    Object.assign(foundProduct, update);
+
+    return `Product ${id} updated successfully`
   }
 
-  getProduct(id) {
-
+  getProduct(id: number): string | Product {
+    let foundProduct: Product = this.products.find(products => products.id === id)
+    if (!foundProduct) {
+      return `Product not found`
+    }
+    return foundProduct
   }
 
-  getAllProducts() {
-
+  getAllProducts(): Product[] {
+    return this.products
   }
 
-  removeProduct(id) {
-
+  removeProduct(id: number): string {
+    this.products = this.products.filter(product => product.id != id)
+    return `Product ${id} removed successfully`
   }
 }
 

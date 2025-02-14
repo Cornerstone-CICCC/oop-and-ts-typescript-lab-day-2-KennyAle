@@ -12,11 +12,12 @@ class MyStorage<T, U> {
   items = []
 
   addItem(item) {
-
+    this.items.push(item)
+    return `${item} added`
   }
 
   getItems() {
-
+    return this.items
   }
 
   removeItem(id) {
