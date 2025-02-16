@@ -9,27 +9,57 @@
 // 6. Implement a method `updateItem` that updates an item by its property value.
 
 class MyStorage<T, U> {
-  items = []
+  items: T[] = []
 
-  addItem(item) {
+  addItem(item: T): string {
     this.items.push(item)
-    return `${item} added`
+
+    if (typeof item === "object" && item !== null && "name" in item) {
+      return `User ${(item as any).name} added.`
+    }
+    return `${item} added to storage.`
   }
 
-  getItems() {
+  getItems(): T[] {
     return this.items
   }
 
-  removeItem(id) {
+  removeItem(id: U | number): string {
+    const initialLength = this.items.length
+    this.items = this.items.filter((item: any) => {
+      if (typeof item === "object" && item !== null && "id" in item) {
+        return item.id !== id
+      }
+      return item !== id
+    })
 
+    return this.items.length < initialLength
+      ? `Item ${id} removed from storage.`
+      : `Item ${id} not found in storage.`
   }
 
-  findItem(prop, val) {
-
+  findItem(prop: keyof T, val: any): T {
+    return this.items.find(item => item[prop] === val)
   }
 
-  updateItem(prop, id, update) {
+  updateItem(prop: keyof T, id: any, update: Partial<T>): string {
+    if (typeof prop !== "string" && typeof prop !== "number") {
+      throw new Error(`Invalid property type: ${typeof prop}`)
+    }
 
+    const index = this.items.findIndex(item => item[prop] === id)
+
+    if (index === -1) {
+      return `Item ${prop} ${id} not found in storage.`
+    }
+
+    this.items[index] = { ...this.items[index], ...update }
+
+    if ("name" in update && typeof update.name === "string") {
+      return `${update.name} updated successfully.`
+    }
+
+    return `Item ${prop} ${id} updated successfully.`
   }
 }
 

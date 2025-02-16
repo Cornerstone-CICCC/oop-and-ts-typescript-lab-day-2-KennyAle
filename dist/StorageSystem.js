@@ -11,16 +11,42 @@ class MyStorage {
     items = [];
     addItem(item) {
         this.items.push(item);
-        return `${item} added`;
+        if (typeof item === "object" && item !== null && "name" in item) {
+            return `User ${item.name} added.`;
+        }
+        return `${item} added to storage.`;
     }
     getItems() {
         return this.items;
     }
     removeItem(id) {
+        const initialLength = this.items.length;
+        this.items = this.items.filter((item) => {
+            if (typeof item === "object" && item !== null && "id" in item) {
+                return item.id !== id;
+            }
+            return item !== id;
+        });
+        return this.items.length < initialLength
+            ? `Item ${id} removed from storage.`
+            : `Item ${id} not found in storage.`;
     }
     findItem(prop, val) {
+        return this.items.find(item => item[prop] === val);
     }
     updateItem(prop, id, update) {
+        if (typeof prop !== "string" && typeof prop !== "number") {
+            throw new Error(`Invalid property type: ${typeof prop}`);
+        }
+        const index = this.items.findIndex(item => item[prop] === id);
+        if (index === -1) {
+            return `Item ${prop} ${id} not found in storage.`;
+        }
+        this.items[index] = { ...this.items[index], ...update };
+        if ("name" in update && typeof update.name === "string") {
+            return `${update.name} updated successfully.`;
+        }
+        return `Item ${prop} ${id} updated successfully.`;
     }
 }
 // Test cases

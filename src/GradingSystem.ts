@@ -20,16 +20,16 @@ interface Student {
 }
 
 class Gradebook<T extends Student> {
-  students = []
+  students: T[] = []
 
-  addStudent(student: Student): string {
+  addStudent(student: T): string {
     this.students.push(student)
 
     return `${student.name} added to the Gradebook`
   }
 
   addGrade(id: number, grade: Grade): string {
-    const studentFound: Student = this.students.find(student => student.id === id)
+    const studentFound = this.students.find(student => student.id === id)
     if (!studentFound) {
       return `Student not found`
     }
@@ -38,7 +38,7 @@ class Gradebook<T extends Student> {
   }
 
   getAverageGrade(id: number): string {
-    const studentFound: Student = this.students.find(student => student.id === id)
+    const studentFound = this.students.find(student => student.id === id)
     if (!studentFound) {
       return `Student not found`
     }
@@ -52,7 +52,7 @@ class Gradebook<T extends Student> {
   }
 
   getStudentGrades(id: number): string {
-    const studentFound: Student = this.students.find(student => student.id === id)
+    const studentFound = this.students.find(student => student.id === id)
     if (!studentFound) {
       return `Student not found`
     }
@@ -66,7 +66,7 @@ class Gradebook<T extends Student> {
   }
 
   updateSubjectGrade(id: number, subject: string, newGrade: number): string {
-    const studentFound: Student = this.students.find(student => student.id === id)
+    const studentFound = this.students.find(student => student.id === id)
     if (!studentFound) {
       return `Student not found`
     }

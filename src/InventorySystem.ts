@@ -16,15 +16,15 @@ interface Product {
 }
 
 class InventoryManager<T extends Product> {
-  products = []
+  products: T[] = []
 
-  addProduct(product: Product): string {
+  addProduct(product: T): string {
     this.products.push(product)
     return `Product ${product.name} added successfully!`
   }
 
-  updateProduct(id: number, update): string {
-    let foundProduct: Product = this.products.find(products => products.id === id)
+  updateProduct(id: number, update: Partial<Product>): string {
+    let foundProduct = this.products.find(products => products.id === id)
     if (!foundProduct) {
       return `Product not found`
     }
@@ -35,7 +35,7 @@ class InventoryManager<T extends Product> {
   }
 
   getProduct(id: number): string | Product {
-    let foundProduct: Product = this.products.find(products => products.id === id)
+    let foundProduct = this.products.find(products => products.id === id)
     if (!foundProduct) {
       return `Product not found`
     }
